@@ -5,8 +5,8 @@ MNMLSTC Flyweight is a small and easy to use C++11 library that implements the
 `flyweight pattern <http://en.wikipedia.org/wiki/Flyweight_pattern>`_. It is a
 header only library.
 
-Information on installing and using MNMLSTC Flyweight can be found in its
-documentation.
+Information on installing and using MNMLSTC Flyweight (as well as its
+limitations) can be found in its documentation.
 
 MNMLSTC Flyweight is released under the Apache 2.0 License.
 
