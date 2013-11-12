@@ -145,8 +145,6 @@ endif ()
 
 if (BUILD_TESTING)
   set(CMAKE_TEST_COMMAND ctest)
-  set(TEST_SOURCE_DIR "${PROJECT_SOURCE_DIR}/tests")
-  set(TEST_BINARY_DIR "${PROJECT_SOURCE_DIR}/tests")
   add_subdirectory("${TEST_SOURCE_DIR}" "${TEST_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif ()
 
