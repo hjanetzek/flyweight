@@ -1,6 +1,8 @@
 #ifndef FLYWEIGHT_EXTRACTOR_HPP
 #define FLYWEIGHT_EXTRACTOR_HPP
 
+#include <core/type_traits.hpp>
+
 namespace flyweight {
 inline namespace v1 {
 

@@ -117,7 +117,10 @@ configure_package_config_file(
   PATH_VARS INCLUDE_INSTALL_DIR CMAKE_INSTALL_DIR
 )
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(
+  "${PROJECT_SOURCE_DIR}/include"
+  "${CORE_INCLUDE_DIR}"
+)
 
 if (CAN_USE_STDLIB_LIBCXX AND BUILD_WITH_LIBCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_STDLIB_LIBCXX}")
