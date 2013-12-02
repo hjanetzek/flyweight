@@ -176,8 +176,7 @@ private:
     this->container.erase(*ptr);
   }
 
-  template <class ValueType>
-  void remove (ValueType* ptr, std::true_type&&) noexcept {
+  void remove (T const* ptr, std::true_type&&) noexcept {
     if (not ptr) { return; }
     /* We don't want to keep the mutex locked after we've removed the weak_ptr */
     {
@@ -185,8 +184,23 @@ private:
       auto const& key = this->extractor(*ptr);
       this->container.erase(key);
     }
-    std::allocator_traits<allocator_type>::destruct(this->allocator, ptr);
-    std::allocator_traits<allocator_type>::deallocate(this->allocator, ptr, 1);
+    std::allocator_traits<allocator_type>::destroy(this->allocator, ptr);
+    /* It is OK for us to const_cast here.
+     * Because you CANNOT have an allocator to a T const, this means that it
+     * can ONLY allocate a non-const pointer. And when is it ok to const_cast?
+     * If the original object was declared as non-const (which it was). Now,
+     * granted we've been copying the const pointer from shared_ptr to
+     * shared_ptr, but, the object located at ptr has already been destroyed,
+     * and now we're attempting to inform the allocator that the *mutable*
+     * ptr it allocated is now to be deallocated. HENCE, THIS IS LEGAL.
+     *
+     * *DOINK* *DOINK*
+     */
+    std::allocator_traits<allocator_type>::deallocate(
+      this->allocator,
+      const_cast<T*>(ptr),
+      1
+    );
   }
 
   cache () = default;
