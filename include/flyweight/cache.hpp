@@ -41,7 +41,8 @@ struct container_traits final {
   using mapped_type = std::weak_ptr<core::add_const_t<T>>;
   using key_type = core::conditional_t<
     sizeof(computed_key_type) <=
-    sizeof(std::reference_wrapper<computed_key_type>),
+    sizeof(std::reference_wrapper<computed_key_type>) or
+    not is_associative::value,
     computed_key_type,
     std::reference_wrapper<core::add_const_t<computed_key_type>>
   >;
@@ -49,8 +50,8 @@ struct container_traits final {
   using container_type = std::unordered_map<
     key_type,
     mapped_type,
-    std::hash<key_type>,
-    std::equal_to<key_type>,
+    std::hash<computed_key_type>,
+    std::equal_to<computed_key_type>,
     typename std::allocator_traits<Allocator>::template rebind_alloc<
       std::pair<core::add_const_t<key_type>, mapped_type>
     >
@@ -80,6 +81,7 @@ template <
   using allocator_type = typename traits::allocator_type;
   using is_associative = typename traits::is_associative;
 
+  using key_type = typename container_type::key_type;
   using tag_type = Tag;
 
   using difference_type = typename container_type::difference_type;
