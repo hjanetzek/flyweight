@@ -51,14 +51,64 @@ int main () {
     },
 
     task("operator-equal") = [] {
-      assert::fail();
+      std::string text { "equal" };
+      flyweight::object<std::string> lhs { text };
+      flyweight::object<std::string> rhs { text };
+
+      assert::equal(lhs, text);
+      assert::equal(rhs, text);
+      assert::equal(lhs, rhs);
     },
 
-    task("operator-not-equal") = [] { assert::fail(); },
-    task("operator-greater-equal") = [] { assert::fail(); },
-    task("operator-less-equal") = [] { assert::fail(); },
-    task("operator-greater") = [] { assert::fail(); },
-    task("operator-less") = [] { assert::fail(); }
+    task("operator-not-equal") = [] {
+      std::string text { "not-equal" };
+      flyweight::object<std::string> lhs { "lhs" };
+      flyweight::object<std::string> rhs { "rhs" };
+
+      assert::not_equal(lhs, text);
+      assert::not_equal(rhs, text);
+      assert::not_equal(lhs, rhs);
+    },
+
+    task("operator-greater-equal") = [] {
+      std::string text { "abcde" };
+      flyweight::object<std::string> lhs { "bcdef" };
+      flyweight::object<std::string> rhs { "bcdef" };
+
+      assert::greater_equal(lhs, text);
+      assert::greater_equal(rhs, text);
+      assert::greater_equal(lhs, rhs);
+    },
+
+    task("operator-less-equal") = [] {
+      std::string text { "bcdef" };
+      flyweight::object<std::string> lhs { "abcde" };
+      flyweight::object<std::string> rhs { "abcde" };
+
+      assert::less_equal(lhs, text);
+      assert::less_equal(rhs, text);
+      assert::less_equal(lhs, rhs);
+    },
+
+    task("operator-greater") = [] {
+      std::string text { "abcde" };
+      flyweight::object<std::string> lhs { "cdefg" };
+      flyweight::object<std::string> rhs { "bcdef" };
+
+      assert::greater(lhs, text);
+      assert::greater(rhs, text);
+      assert::greater(lhs, rhs);
+    },
+
+    task("operator-less") = [] {
+      std::string text { "cdefg" };
+      flyweight::object<std::string> lhs { "abcde" };
+      flyweight::object<std::string> rhs { "bcdef" };
+
+      assert::less(lhs, text);
+      assert::less(rhs, text);
+      assert::less(lhs, rhs);
+    }
   };
 
   monitor::run();
