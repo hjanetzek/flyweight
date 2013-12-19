@@ -41,6 +41,7 @@ There are several requirements to use MNMLSTC Flyweight:
  * A C++11 compliant compiler (GCC 4.8.1 or Clang 3.3 will suffice)
  * `CMake 2.8.12 <http://cmake.org>`_
  * `MNMLSTC Unittest <https://github.com/mnmlstc/unittest>`_
+ * `MNMLSTC Core <https://github.com/mnmlstc/core>`_
  * `Sphinx Documentation Generator <http://sphinx-doc.org>`_
  * `Cloud Sphinx Theme <https://pypi.python.org/pypi/cloud_sptheme>`_
 
