@@ -81,6 +81,7 @@ template <
   using allocator_type = typename traits::allocator_type;
   using is_associative = typename traits::is_associative;
 
+  using allocator_traits = std::allocator_traits<allocator_type>;
   using key_type = typename container_type::key_type;
   using tag_type = Tag;
 
@@ -136,7 +137,6 @@ private:
       std::forward<ValueType>(value),
       std::shared_ptr<core::add_const_t<T>> { }
     );
-    if (not std::get<1>(result)) { /* TODO: Handle the object not being emplaced */ }
     auto iter = std::get<0>(result);
     auto const& key = std::get<0>(*iter);
     std::shared_ptr<core::add_const_t<T>> shared {
@@ -152,11 +152,8 @@ private:
     ValueType&& value,
     std::true_type&&
   ) noexcept {
-    auto ptr = std::allocator_traits<allocator_type>::allocate(
-      this->allocator,
-      1
-    );
-    std::allocator_traits<allocator_type>::construct(
+    auto ptr = allocator_traits::allocate(this->allocator, 1);
+    allocator_traits::construct(
       this->allocator,
       ptr,
       std::forward<ValueType>(value)
@@ -168,8 +165,8 @@ private:
       [this](T const* ptr) { this->remove(ptr, std::true_type { }); }
     };
     auto result = this->container.emplace(key, shared);
-    if (not std::get<1>(result)) { /* TODO: Handle the object not being emplaced */ }
-    return shared;
+    auto pair = std::get<0>(result);
+    return pair->second.lock();
   }
 
   void remove (T const* ptr, std::false_type&&) noexcept {
@@ -186,7 +183,7 @@ private:
       auto const& key = this->extractor(*ptr);
       this->container.erase(key);
     }
-    std::allocator_traits<allocator_type>::destroy(this->allocator, ptr);
+    allocator_traits::destroy(this->allocator, ptr);
     /* It is OK for us to const_cast here.
      * Because you CANNOT have an allocator to a T const, this means that it
      * can ONLY allocate a non-const pointer. And when is it ok to const_cast?
@@ -198,11 +195,7 @@ private:
      *
      * *DOINK* *DOINK*
      */
-    std::allocator_traits<allocator_type>::deallocate(
-      this->allocator,
-      const_cast<T*>(ptr),
-      1
-    );
+    allocator_traits::deallocate(this->allocator, const_cast<T*>(ptr), 1);
   }
 
   cache () = default;

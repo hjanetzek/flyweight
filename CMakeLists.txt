@@ -5,17 +5,18 @@ project(flyweight CXX)
 # Modules, Variables, and Options
 #------------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
+include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 include(CheckIncludeFileCXX)
 include(CTest)
 
-find_package(core REQUIRED)
+find_package(core REQUIRED NO_CMAKE_BUILDS_PATH)
 
 set(INCLUDE_INSTALL_DIR "include" CACHE INTERNAL "Header Files")
 set(CMAKE_INSTALL_DIR "share/cmake/flyweight" CACHE INTERNAL "CMake Files")
 set(DOCS_INSTALL_DIR "share/doc/mnmlstc/flyweight" CACHE INTERNAL "Docs")
 
-set(FLYWEIGHT_VERSION_MAJOR 0)
+set(FLYWEIGHT_VERSION_MAJOR 1)
 set(FLYWEIGHT_VERSION_MINOR 0)
 set(FLYWEIGHT_VERSION_PATCH 0)
 set(FLYWEIGHT_VERSION
@@ -28,10 +29,25 @@ set(TEST_BINARY_DIR "${PROJECT_BINARY_DIR}/tests")
 set(DOCS_SOURCE_DIR "${PROJECT_SOURCE_DIR}/docs")
 set(DOCS_BINARY_DIR "${PROJECT_BINARY_DIR}/docs")
 
+set(PACK_SOURCE_DIR "${PROJECT_SOURCE_DIR}/package")
+set(PACK_BINARY_DIR "${PROJECT_BINARY_DIR}/package")
+
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/configure")
 
+# Used by cmake-dependent-option
+list(APPEND RPM_DEP "UNIX" "NOT APPLE" "BUILD_PACKAGE")
+list(APPEND DEB_DEP "UNIX" "NOT APPLE" "BUILD_PACKAGE")
+list(APPEND PKG_DEP "APPLE" "BUILD_PACKAGE")
+list(APPEND MSI_DEP "WIN32" "BUILD_PACKAGE")
+
 option(BUILD_WITH_LIBCXX "Use libc++ as stdlib" OFF)
+option(BUILD_PACKAGE "Build package with CPack" OFF)
 option(BUILD_DOCS "Build documentation with Sphinx Documentation Generator")
+
+cmake_dependent_option(BUILD_PACKAGE_MSI "Create an MSI" ON "${MSI_DEP}" OFF)
+cmake_dependent_option(BUILD_PACKAGE_RPM "Create an RPM" ON "${RPM_DEP}" OFF)
+cmake_dependent_option(BUILD_PACKAGE_DEB "Create a DEB" ON "${DEB_DEP}" OFF)
+cmake_dependent_option(BUILD_PACKAGE_PKG "Create a PKG" ON "${PKG_DEP}" OFF)
 
 if (APPLE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   set(BUILD_WITH_LIBCXX ON CACHE BOOL "Use libc++ as stdlib" ON)
@@ -133,7 +149,6 @@ add_compile_options(
   $<$<BOOL:${CAN_WARN_ALL}>:${WARN_ALL}>
   $<$<BOOL:${CAN_WARN_NOEXCEPT}>:${WARN_NOEXCEPT}>
   $<$<BOOL:${CAN_WARN_EXTRA}>:${WARN_EXTRA}>
-  "-g"
 )
 
 if (BUILD_TESTING)
@@ -143,6 +158,10 @@ endif ()
 
 if (BUILD_DOCS)
   add_subdirectory("${DOCS_SOURCE_DIR}" "${DOCS_BINARY_DIR}" EXCLUDE_FROM_ALL)
+endif ()
+
+if (BUILD_PACKAGE)
+  add_subdirectory("${PACK_SOURCE_DIR}" "${PACK_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif ()
 
 #------------------------------------------------------------------------------
@@ -159,12 +178,15 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/flyweight"
   FILES_MATCHING PATTERN "*.hpp"
 )
 
-install(DIRECTORY "${DOCS_BINARY_DIR}/"
-  DESTINATION ${DOCS_INSTALL_DIR}
-  FILES_MATCHING PATTERN "*"
-)
-
-#------------------------------------------------------------------------------
-# Package
-#------------------------------------------------------------------------------
-
+if (BUILD_DOCS)
+  install(DIRECTORY "${DOCS_BINARY_DIR}/"
+    DESTINATION ${DOCS_INSTALL_DIR}
+    FILES_MATCHING
+    PATTERN ".buildinfo" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    PATTERN ".doctrees" EXCLUDE
+    PATTERN "Makefile" EXCLUDE
+    PATTERN "*.cmake" EXCLUDE
+    PATTERN "*"
+  )
+endif ()
