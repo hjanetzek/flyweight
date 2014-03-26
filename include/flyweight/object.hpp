@@ -73,80 +73,88 @@ private:
   std::shared_ptr<value_type> handle;
 };
 
-template <class T>
-bool operator == (object<T> const& lhs, object<T> const& rhs) {
-  return std::equal_to<T> { }(lhs, rhs);
+template <class U, class E, class A, class T>
+bool operator == (
+  object<U, E, A, T> const& lhs,
+  object<U, E, A, T> const& rhs
+) { return std::equal_to<U> { }(lhs, rhs); }
+
+template <class U, class E, class A, class T>
+bool operator != (
+  object<U, E, A, T> const& lhs,
+  object<U, E, A, T> const& rhs
+) { return std::not_equal_to<U> { }(lhs, rhs); }
+
+template <class U, class E, class A, class T>
+bool operator >= (
+  object<U, E, A, T> const& lhs,
+  object<U, E, A, T> const& rhs)
+{ return std::greater_equal<U> { }(lhs, rhs); }
+
+template <class U, class E, class A, class T>
+bool operator <= (
+  object<U, E, A, T> const& lhs,
+  object<U, E, A, T> const& rhs
+) { return std::less_equal<U> { }(lhs, rhs); }
+
+template <class U, class E, class A, class T>
+bool operator > (
+  object<U, E, A, T> const& lhs,
+  object<U, E, A, T> const& rhs
+) { return std::greater<U> { }(lhs, rhs); }
+
+template <class U, class E, class A, class T>
+bool operator < (
+  object<U, E, A, T> const& lhs,
+  object<U, E, A, T> const& rhs
+) { return std::less<U> { }(lhs, rhs); }
+
+template <class U, class E, class A, class T>
+bool operator == (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::equal_to<U> { }(lhs, rhs);
 }
 
-template <class T>
-bool operator != (object<T> const& lhs, object<T> const& rhs) {
-  return std::not_equal_to<T> { }(lhs, rhs);
+template <class U, class E, class A, class T>
+bool operator != (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::not_equal_to<U> { }(lhs, rhs);
 }
 
-template <class T>
-bool operator >= (object<T> const& lhs, object<T> const& rhs) {
-  return std::greater_equal<T> { }(lhs, rhs);
+template <class U, class E, class A, class T>
+bool operator >= (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::greater_equal<U> { }(lhs, rhs);
 }
 
-template <class T>
-bool operator <= (object<T> const& lhs, object<T> const& rhs) {
-  return std::less_equal<T> { }(lhs, rhs);
+template <class U, class E, class A, class T>
+bool operator <= (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::less_equal<U> { }(lhs, rhs);
 }
 
-template <class T>
-bool operator > (object<T> const& lhs, object<T> const& rhs) {
-  return std::greater<T> { }(lhs, rhs);
+template <class U, class E, class A, class T>
+bool operator > (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::greater<U> { }(lhs, rhs);
 }
 
-template <class T>
-bool operator < (object<T> const& lhs, object<T> const& rhs) {
-  return std::less<T> { }(lhs, rhs);
-}
-
-template <class T>
-bool operator == (object<T> const& lhs, T const& rhs) {
-  return std::equal_to<T> { }(lhs, rhs);
-}
-
-template <class T>
-bool operator != (object<T> const& lhs, T const& rhs) {
-  return std::not_equal_to<T> { }(lhs, rhs);
-}
-
-template <class T>
-bool operator >= (object<T> const& lhs, T const& rhs) {
-  return std::greater_equal<T> { }(lhs, rhs);
-}
-
-template <class T>
-bool operator <= (object<T> const& lhs, T const& rhs) {
-  return std::less_equal<T> { }(lhs, rhs);
-}
-
-template <class T>
-bool operator > (object<T> const& lhs, T const& rhs) {
-  return std::greater<T> { }(lhs, rhs);
-}
-
-template <class T>
-bool operator < (object<T> const& lhs, T const& rhs) {
-  return std::less<T> { }(lhs, rhs);
+template <class U, class E, class A, class T>
+bool operator < (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::less<U> { }(lhs, rhs);
 }
 
 }} /* namespace flyweight::v1 */
 
 namespace std {
 
-template <class T>
+template <class U, class E, class A, class T>
 void swap (
-  flyweight::v1::object<T>& lhs,
-  flyweight::v1::object<T>& rhs
+  flyweight::v1::object<U, E, A, T>& lhs,
+  flyweight::v1::object<U, E, A, T>& rhs
 ) noexcept(noexcept(lhs.swap(rhs))) { return lhs.swap(rhs); }
 
-template <class T>
-struct hash<flyweight::v1::object<T>> {
-  using argument_type = flyweight::v1::object<T>;
-  using result_type = typename hash<typename argument_type::value_type>::result_type;
+template <class U, class E, class A, class T>
+struct hash<flyweight::v1::object<U, E, A, T>> {
+  using argument_type = flyweight::v1::object<U, E, A, T>;
+  using result_type = typename hash<
+    typename argument_type::value_type
+  >::result_type;
 
   result_type operator ()(argument_type const& value) const noexcept {
     return hash<typename argument_type::value_type> { }(value);
