@@ -100,7 +100,7 @@ all the actual *handle* to the const object.
       :returns: A :type:`reference` to the value handled by |object|.
 
 Equality and Comparisons
-------------------------
+########################
 
 |object| is *LessThanComparable* and *EqualityComparable*. It implements
 overloads for *all* the comparison operators.
@@ -129,7 +129,7 @@ overloads for *all* the comparison operators.
    ``std::greater``, or ``std::less`` respectively.
 
 Specializations
----------------
+###############
 
 There are a few specializations for |object| so that it may interact with
 the C++ standard library.
