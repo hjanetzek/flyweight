@@ -47,10 +47,12 @@ template <
   } { }
 
   object (object const&) = default;
+  object (object&&) = delete;
   object () : object { value_type { } } { }
   ~object () = default;
 
   object& operator = (object const&) = default;
+  object& operator = (object&&) = delete;
 
   template <
     class ValueType,
@@ -77,37 +79,37 @@ template <class U, class E, class A, class T>
 bool operator == (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) { return std::equal_to<U> { }(lhs, rhs); }
+) noexcept { return std::equal_to<U> { }(lhs, rhs); }
 
 template <class U, class E, class A, class T>
 bool operator != (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) { return std::not_equal_to<U> { }(lhs, rhs); }
+) noexcept { return std::not_equal_to<U> { }(lhs, rhs); }
 
 template <class U, class E, class A, class T>
 bool operator >= (
   object<U, E, A, T> const& lhs,
-  object<U, E, A, T> const& rhs)
-{ return std::greater_equal<U> { }(lhs, rhs); }
+  object<U, E, A, T> const& rhs
+) noexcept { return std::greater_equal<U> { }(lhs, rhs); }
 
 template <class U, class E, class A, class T>
 bool operator <= (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) { return std::less_equal<U> { }(lhs, rhs); }
+) noexcept { return std::less_equal<U> { }(lhs, rhs); }
 
 template <class U, class E, class A, class T>
 bool operator > (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) { return std::greater<U> { }(lhs, rhs); }
+) noexcept { return std::greater<U> { }(lhs, rhs); }
 
 template <class U, class E, class A, class T>
 bool operator < (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) { return std::less<U> { }(lhs, rhs); }
+) noexcept { return std::less<U> { }(lhs, rhs); }
 
 template <class U, class E, class A, class T>
 bool operator == (object<U, E, A, T> const& lhs, U const& rhs) {
