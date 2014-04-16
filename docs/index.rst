@@ -16,3 +16,4 @@ It is recommended that new users read the section on
    Using MNMLSTC Flyweight <usage>
    object
    cache
+   extractor

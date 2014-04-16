@@ -34,7 +34,7 @@ template <
     class... Args,
     class=core::enable_if_t<std::is_constructible<value_type, Args...>::value>
   > object (Args&&... args) : object {
-    value_type { std::forward<Args>(args)... }
+    value_type { ::std::forward<Args>(args)... }
   } { }
 
   template <
@@ -43,7 +43,7 @@ template <
       std::is_same<core::decay_t<ValueType>, core::decay_t<value_type>>::value
     >
   > explicit object (ValueType&& value) : handle {
-    cache_type::ref().find(std::forward<ValueType>(value))
+    cache_type::ref().find(::std::forward<ValueType>(value))
   } { }
 
   object (object const&) = default;
@@ -60,11 +60,14 @@ template <
       not std::is_same<object, core::decay_t<ValueType>>::value
     >
   > object& operator = (ValueType&& value) {
-    object { std::forward<ValueType>(value) }.swap(*this);
+    object { ::std::forward<ValueType>(value) }.swap(*this);
     return *this;
   }
 
-  void swap (object& that) noexcept { std::swap(this->handle, that.handle); }
+  void swap (object& that) noexcept {
+    using std::swap;
+    swap(this->handle, that.handle);
+  }
 
   pointer operator -> () const noexcept { return this->handle.get(); }
   operator reference () const noexcept { return this->get(); }
@@ -141,15 +144,14 @@ bool operator < (object<U, E, A, T> const& lhs, U const& rhs) {
   return std::less<U> { }(lhs, rhs);
 }
 
+template <class U, class E, class A, class T>
+void swap (object<U, E, A, T>& lhs, object<U, E, A, T>& rhs) noexcept(
+  noexcept(lhs.swap(rhs))
+) { return lhs.swap(rhs); }
+
 }} /* namespace flyweight::v1 */
 
 namespace std {
-
-template <class U, class E, class A, class T>
-void swap (
-  flyweight::v1::object<U, E, A, T>& lhs,
-  flyweight::v1::object<U, E, A, T>& rhs
-) noexcept(noexcept(lhs.swap(rhs))) { return lhs.swap(rhs); }
 
 template <class U, class E, class A, class T>
 struct hash<flyweight::v1::object<U, E, A, T>> {

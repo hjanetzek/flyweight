@@ -121,7 +121,7 @@ template <
     auto const& key = this->extractor(value);
     auto iter = this->container.find(key);
     if (iter != this->end()) { return iter->second.lock(); }
-    return this->insert(std::forward<ValueType>(value), is_associative { });
+    return this->insert(::std::forward<ValueType>(value), is_associative { });
   }
 
 private:
@@ -134,7 +134,7 @@ private:
     std::false_type&&
   ) noexcept {
     auto result = this->container.emplace(
-      std::forward<ValueType>(value),
+      ::std::forward<ValueType>(value),
       std::shared_ptr<core::add_const_t<T>> { }
     );
     auto iter = std::get<0>(result);
@@ -156,7 +156,7 @@ private:
     allocator_traits::construct(
       this->allocator,
       ptr,
-      std::forward<ValueType>(value)
+      ::std::forward<ValueType>(value)
     );
 
     auto const& key = this->extractor(*ptr);
