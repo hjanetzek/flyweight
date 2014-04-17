@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using MNMLSTC Flyweight &mdash; MNMLSTC Flyweight 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="MNMLSTC Flyweight 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Overview" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Overview"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">MNMLSTC Flyweight 1.0 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-mnmlstc-flyweight">
+<span id="id1"></span><h1>Using MNMLSTC Flyweight<a class="headerlink" href="#using-mnmlstc-flyweight" title="Permalink to this headline">¶</a></h1>
+<p>This section of documentation discusses how to use MNMLSTC Flyweight. It
+briefly discusses using CMake to <em>discover</em> MNMLSTC Flyweight on a system, as
+well as which headers to include.</p>
+<div class="section" id="cmake-and-find-package">
+<h2>CMake and find_package<a class="headerlink" href="#cmake-and-find-package" title="Permalink to this headline">¶</a></h2>
+<p>After installing MNMLSTC Flyweight with CMake, it is easy to use cmake&#8217;s
+<tt class="docutils literal"><span class="pre">find_package</span></tt> command.</p>
+<div class="highlight-cmake"><div class="highlight"><pre><span class="nb">find_package</span><span class="p">(</span><span class="s">flyweight</span> <span class="s">REQUIRED</span> <span class="s">NO_CMAKE_BUILDS_PATH</span><span class="p">)</span>
+
+<span class="c"># Later on in the file.</span>
+<span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">FLYWEIGHT_INCLUDE_DIR</span><span class="o">}</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is recommended to avoid having a current build of MNMLSTC Flyweight
+somewhere on your system, as it will take precedence over installed versions.
+Additionally, MNMLSTC Flyweight is not designed to be used from a build
+directory.</p>
+<p>If you are on Windows and have installed MNMLSTC Flyweight from an MSI,
+CMake will be able to find the package correctly.</p>
+</div>
+<div class="section" id="including-necessary-headers">
+<h2>Including Necessary Headers<a class="headerlink" href="#including-necessary-headers" title="Permalink to this headline">¶</a></h2>
+<p>Only one header is needed to fully utilize MNMLSTC Flyweight:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="cp">#include &lt;flyweight/object.hpp&gt;</span>
+</pre></div>
+</div>
+<p>This header pulls in all the types used by MNMLSTC Flyweight.</p>
+</div>
+<div class="section" id="feature-addition-and-deprecation">
+<h2>Feature Addition and Deprecation<a class="headerlink" href="#feature-addition-and-deprecation" title="Permalink to this headline">¶</a></h2>
+<p>MNMLSTC FLyweight follows <a class="reference external" href="http://semver.org/spec/v2.0.0.html">Semantic Versioning 2.0</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxlocaltoc">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using MNMLSTC Flyweight</a><ul>
+<li><a class="reference internal" href="#cmake-and-find-package">CMake and find_package</a></li>
+<li><a class="reference internal" href="#including-necessary-headers">Including Necessary Headers</a></li>
+<li><a class="reference internal" href="#feature-addition-and-deprecation">Feature Addition and Deprecation</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Overview</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/usage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Overview"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">MNMLSTC Flyweight 1.0 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, MNMLSTC.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Flyweight Object &mdash; MNMLSTC Flyweight 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="MNMLSTC Flyweight 1.0 documentation" href="index.html" />
+    <link rel="next" title="Flyweight Cache" href="cache.html" />
+    <link rel="prev" title="Using MNMLSTC Flyweight" href="usage.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Flyweight Cache"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="usage.html" title="Using MNMLSTC Flyweight"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">MNMLSTC Flyweight 1.0 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="flyweight-object">
+<span id="flyweight-object-component"></span><h1>Flyweight Object<a class="headerlink" href="#flyweight-object" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> component of MNMLSTC Flyweight is the most important. It is, after
+all the actual <em>handle</em> to the const object.</p>
+<dl class="class">
+<dt id="object:T.KeyExtractor.Allocator.Tag:">
+<em class="property">class </em><tt class="descname">object&lt;T, KeyExtractor, Allocator, Tag&gt;</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> takes 4 types, however 3 of these have default values. The types
+<em>KeyExtractor</em>, <em>Allocator</em>, and <em>Tag</em> are passed through to the <a class="reference internal" href="cache.html#cache:T.KeyExtractor.Allocator.Tag:" title="cache&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">cache</span></tt></a>.
+The <em>Tag</em> type is important when wishing that certain objects be stored
+elsewhere. For instance, if a <tt class="docutils literal"><span class="pre">std::string</span></tt> were used to represent one set
+of data as well as a completely different set altogether, the <em>Tag</em> can be
+used to change where they are stored:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="k">using</span> <span class="k">namespace</span> <span class="n">flyweight</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">person</span> <span class="o">=</span> <span class="n">object</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">city</span> <span class="o">=</span> <span class="n">object</span><span class="o">&lt;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span>
+  <span class="n">extractor</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">tag</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="c1">// any set of types placed inside of tag&lt;&gt; will do</span>
+<span class="o">&gt;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">flyweight::tag</span></tt> type takes any number of types, and is simply used
+to instantiate separate caches, and nothing more. One could technically
+pass in many different types to generate a different cache.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> is <em>copy-constructible</em> and <em>copy-assignable</em>.
+It is <em>not</em> moveable. An <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> must <em>always</em> have a valid handle to
+an object. It can <em>never</em> be in a &#8220;valid, but null state&#8221;.</p>
+</div>
+<dl class="type">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::value_type">
+<em class="property">type </em><tt class="descname">value_type</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the type that <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> acts as a handle for. It is <em>always</em>
+<tt class="docutils literal"><span class="pre">T</span> <span class="pre">const</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>value_type</em> may never be a reference type. Attempting this
+will result in a <tt class="docutils literal"><span class="pre">static_assert</span></tt>.</p>
+</div>
+</dd></dl>
+
+<dl class="type">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::cache_type">
+<em class="property">type </em><tt class="descname">cache_type</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::cache_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the <a class="reference internal" href="cache.html#cache:T.KeyExtractor.Allocator.Tag:" title="cache&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">cache</span></tt></a> that <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> will use to retrieve a handle from.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::key_type">
+<em class="property">type </em><tt class="descname">key_type</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::key_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the type that is extracted for lookup within the <a class="reference internal" href="cache.html#cache:T.KeyExtractor.Allocator.Tag:" title="cache&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">cache</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::pointer">
+<em class="property">type </em><tt class="descname">pointer</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::pointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a pointer to <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::value_type"><tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::object__X">
+ <tt class="descname">object</tt><big>(</big><em>Args&amp;&amp;</em><big>)</big><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::object__X" title="Permalink to this definition">¶</a></dt>
+<dt>
+ <tt class="descname">object</tt><big>(</big><em>ValueType&amp;&amp;</em><big>)</big></dt>
+<dd><p>An <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> may be constructed with a value where <em>ValueType</em> is the same
+as <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::value_type"><tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt></a>. Additionally, it may be constructed with a
+variadic number of arguments, as long as <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::value_type"><tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt></a> may be
+constructed from it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::object">
+ <tt class="descname">object</tt><big>(</big><big>)</big><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constructing an <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> will result in a handle to a default
+constructed <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::value_type"><tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::assign-operator__ValueTypeRR">
+object&amp; <tt class="descname">operator=</tt><big>(</big>ValueType&amp;&amp; <em>value</em><big>)</big><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::assign-operator__ValueTypeRR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will change the <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> to act as handle for <em>ValueType</em>. <em>ValueType</em>
+must be the same as <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::value_type"><tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt></a>. It acts as a <em>universal reference</em></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::swap__objectR">
+void <tt class="descname">swap</tt><big>(</big>object&amp; <em>that</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::swap__objectR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swaps the contents of <em>that</em> with <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::pointer-operatorC">
+<a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::pointer" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::pointer">pointer</a> <tt class="descname">operator-&gt;</tt><big>(</big><big>)</big><tt class="descclassname"> const</tt><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::pointer-operatorC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows the user to directly access the value that the <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> handles.
+This was added for convenience. <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> is not actually a wrapper for
+the <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:::value_type" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;::value_type"><tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt></a> that it holds onto.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::castto-reference-operatorC">
+ <tt class="descname">operator</tt> reference<big>(</big><big>)</big><tt class="descclassname"> const</tt><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::castto-reference-operatorC" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <tt class="xref cpp cpp-type docutils literal"><span class="pre">reference</span></tt> to the value handled by <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="object:T.KeyExtractor.Allocator.Tag:::getC">
+reference <tt class="descname">get</tt><big>(</big><big>)</big><tt class="descclassname"> const</tt><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#object:T.KeyExtractor.Allocator.Tag:::getC" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <tt class="xref cpp cpp-type docutils literal"><span class="pre">reference</span></tt> to the value handled by <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="equality-and-comparisons">
+<h2>Equality and Comparisons<a class="headerlink" href="#equality-and-comparisons" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> is <em>LessThanComparable</em> and <em>EqualityComparable</em>. It implements
+overloads for <em>all</em> the comparison operators.</p>
+<dl class="function">
+<dt id="eq-operator__objectCR.X">
+bool <tt class="descname">operator==</tt><big>(</big>object const&amp; <em>lhs</em>, <em>object const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#eq-operator__objectCR.X" title="Permalink to this definition">¶</a></dt>
+<dt id="neq-operator__objectCR.X">
+bool <tt class="descname">operator!=</tt><big>(</big>object const&amp; <em>lhs</em>, <em>object const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#neq-operator__objectCR.X" title="Permalink to this definition">¶</a></dt>
+<dt id="lte-operator__objectCR.X">
+bool <tt class="descname">operator&lt;=</tt><big>(</big>object const&amp; <em>lhs</em>, <em>object const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#lte-operator__objectCR.X" title="Permalink to this definition">¶</a></dt>
+<dt id="gte-operator__objectCR.X">
+bool <tt class="descname">operator&gt;=</tt><big>(</big>object const&amp; <em>lhs</em>, <em>object const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#gte-operator__objectCR.X" title="Permalink to this definition">¶</a></dt>
+<dt id="gt-operator__objectCR.X">
+bool <tt class="descname">operator&gt;</tt><big>(</big>object const&amp; <em>lhs</em>, <em>object const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#gt-operator__objectCR.X" title="Permalink to this definition">¶</a></dt>
+<dt id="lt-operator__objectCR.X">
+bool <tt class="descname">operator&lt;</tt><big>(</big>object const&amp; <em>lhs</em>, <em>object const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#lt-operator__objectCR.X" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> by their underlying reference.
+<tt class="docutils literal"><span class="pre">std::equal_to</span></tt>, <tt class="docutils literal"><span class="pre">std::not_equal_to</span></tt>, <tt class="docutils literal"><span class="pre">std::greater_equal</span></tt>,
+<tt class="docutils literal"><span class="pre">std::less_equal</span></tt>, <tt class="docutils literal"><span class="pre">std::greater</span></tt>, or <tt class="docutils literal"><span class="pre">std::less</span></tt> is used for each
+of the operations respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="eq-operator__X.X">
+bool <tt class="descname">operator==</tt><big>(</big><em>object const&amp;</em>, <em>T const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#eq-operator__X.X" title="Permalink to this definition">¶</a></dt>
+<dt id="neq-operator__X.X">
+bool <tt class="descname">operator!=</tt><big>(</big><em>object const&amp;</em>, <em>T const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#neq-operator__X.X" title="Permalink to this definition">¶</a></dt>
+<dt id="gte-operator__X.X">
+bool <tt class="descname">operator&gt;=</tt><big>(</big><em>object const&amp;</em>, <em>T const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#gte-operator__X.X" title="Permalink to this definition">¶</a></dt>
+<dt id="lte-operator__X.X">
+bool <tt class="descname">operator&lt;=</tt><big>(</big><em>object const&amp;</em>, <em>T const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#lte-operator__X.X" title="Permalink to this definition">¶</a></dt>
+<dt id="gt-operator__X.X">
+bool <tt class="descname">operator&gt;</tt><big>(</big><em>object const&amp;</em>, <em>T const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#gt-operator__X.X" title="Permalink to this definition">¶</a></dt>
+<dt id="lt-operator__X.X">
+bool <tt class="descname">operator&lt;</tt><big>(</big><em>object const&amp;</em>, <em>T const&amp;</em><big>)</big><tt class="descclassname"> noexcept</tt><a class="headerlink" href="#lt-operator__X.X" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> and a <tt class="xref cpp cpp-type docutils literal"><span class="pre">value_type</span></tt> with <tt class="docutils literal"><span class="pre">std::equal_to</span></tt>,
+<tt class="docutils literal"><span class="pre">std::not_equal_to</span></tt>, <tt class="docutils literal"><span class="pre">std::greater_equal</span></tt>, <tt class="docutils literal"><span class="pre">std::less_equal</span></tt>,
+<tt class="docutils literal"><span class="pre">std::greater</span></tt>, or <tt class="docutils literal"><span class="pre">std::less</span></tt> respectively.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="specializations">
+<h2>Specializations<a class="headerlink" href="#specializations" title="Permalink to this headline">¶</a></h2>
+<p>There are a few specializations for <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> so that it may interact with
+the C++ standard library.</p>
+<dl class="class">
+<dt id="std::hash:flyweight::object:Type.KeyExtractor.Allocator.Tag::">
+<em class="property">class </em><tt class="descclassname">std::</tt><tt class="descname">hash&lt;flyweight::object&lt;Type, KeyExtractor, Allocator, Tag&gt;&gt;</tt><a class="headerlink" href="#std::hash:flyweight::object:Type.KeyExtractor.Allocator.Tag::" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specialization is available as long as the type managed by <a class="reference internal" href="#object:T.KeyExtractor.Allocator.Tag:" title="object&lt;T, KeyExtractor, Allocator, Tag&gt;"><tt class="xref cpp cpp-class docutils literal"><span class="pre">object</span></tt></a> is
+also usable by <tt class="docutils literal"><span class="pre">std::hash</span></tt>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxlocaltoc">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Flyweight Object</a><ul>
+<li><a class="reference internal" href="#equality-and-comparisons">Equality and Comparisons</a></li>
+<li><a class="reference internal" href="#specializations">Specializations</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Using MNMLSTC Flyweight</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cache.html"
+                        title="next chapter">Flyweight Cache</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/object.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Flyweight Cache"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="usage.html" title="Using MNMLSTC Flyweight"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">MNMLSTC Flyweight 1.0 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, MNMLSTC.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
