@@ -134,11 +134,6 @@ Specializations
 There are a few specializations for |object| so that it may interact with
 the C++ standard library.
 
-
-.. function:: std::swap (flyweight::object&, flyweight::object&)
-
-   Allows `std::swap` to be used.
-
 .. class:: std::hash<flyweight::object<Type, KeyExtractor, Allocator, Tag>>
 
    This specialization is available as long as the type managed by |object| is
