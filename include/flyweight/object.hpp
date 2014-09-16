@@ -32,7 +32,12 @@ template <
 
   template <
     class... Args,
-    class=core::enable_if_t<std::is_constructible<value_type, Args...>::value>
+    class=core::enable_if_t<
+      core::all_traits<
+        core::no_traits<std::is_same<core::decay_t<Args>, object>...>,
+        std::is_constructible<value_type, Args...>
+      >::value
+    >
   > object (Args&&... args) : object {
     value_type { ::std::forward<Args>(args)... }
   } { }

@@ -1,8 +1,22 @@
-set(FLYWEIGHT_VERSION 1.0.0)
-
 @PACKAGE_INIT@
 
-set_and_check(FLYWEIGHT_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
-set_and_check(FLYWEIGHT_CMAKE_DIR "@PACKAGE_CMAKE_INSTALL_DIR@")
+set(FLYWEIGHT_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(FLYWEIGHT_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(FLYWEIGHT_VERSION_PATCH @PROJECT_VERSION_PATCH@)
+set(FLYWEIGHT_VERSION_TWEAK @PROJECT_VERSION_TWEAK@)
+set(FLYWEIGHT_VERSION @PROJECT_VERSION@)
+
+if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/flyweight-targets.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/flyweight-targets.cmake")
+elseif (EXISTS "${CMAKE_CURRENT_LIST_DIR}/flyweight-export.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/flyweight-export.cmake")
+endif ()
+
+# Provided for backwards compatibility
+get_target_property(FLY_DIR mnmlstc::flyweight INTERFACE_INCLUDE_DIRECTORIES)
+
+set_and_check(FLYWEIGHT_INCLUDE_DIR ${FLY_DIR})
+set_and_check(FLYWEIGHT_INCLUDE_DIRS ${FLY_DIR})
+unset(FLY_DIR)
 
 check_required_components(flyweight)

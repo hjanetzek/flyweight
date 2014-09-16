@@ -1,115 +1,108 @@
+#define CATCH_CONFIG_MAIN
 #include <flyweight/object.hpp>
 #include <string>
 
-#include <unittest/unittest.hpp>
+#include <catch.hpp>
 
-int main () {
-  using namespace unittest;
+TEST_CASE("object-constructor", "[object][constructor]") {
+  flyweight::object<std::string> empty { };
+  CHECK(empty.get().empty());
+}
 
-  test("object") = {
-    task("default-constructor") = [] {
-      flyweight::object<std::string> empty { };
-      assert::is_true(empty.get().empty());
-    },
+TEST_CASE("object-value-constrctor") {
+  flyweight::object<std::string> value { "value-constructor" };
+  CHECK_FALSE(value->empty());
+  CHECK(value->size() == 17);
+}
 
-    task("value-constructor") = [] {
-      flyweight::object<std::string> value { "value-constructor" };
-      assert::is_false(value->empty());
-      assert::equal(value->size(), 17);
-    },
+TEST_CASE("object-copy-constructor") {
+  flyweight::object<std::string> value { "copy" };
+  flyweight::object<std::string> copy { value };
 
-    task("copy-constructor") = [] {
-      flyweight::object<std::string> value { "copy" };
-      flyweight::object<std::string> copy { value };
+  CHECK(value.get() == copy.get());
+}
 
-      assert::is(value.get(), copy.get());
-    },
+TEST_CASE("value-assign-operator") {
+  flyweight::object<std::string> value { };
+  std::string text { "value" };
+  value = text;
+  CHECK(text == value.get());
+}
 
-    task("value-assign-operator") = [] {
-      flyweight::object<std::string> value { };
-      std::string text { "value" };
-      value = text;
-      assert::equal(text, value.get());
-    },
+TEST_CASE("copy-assign-operator") {
+  flyweight::object<std::string> value { "value" };
+  flyweight::object<std::string> copy { };
+  copy = value;
+  CHECK(value.get() == copy.get());
+}
 
-    task("copy-assign-operator") = [] {
-      flyweight::object<std::string> value { "value" };
-      flyweight::object<std::string> copy { };
-      copy = value;
-      assert::is(value.get(), copy.get());
-    },
+TEST_CASE("conversion-operator") {
+  flyweight::object<std::string> value { "conversion" };
+  std::string converted = value;
+  CHECK(value.get() == converted);
+}
 
-    task("conversion-operator") = [] {
-      flyweight::object<std::string> value { "conversion" };
-      std::string converted { value };
-      assert::equal(value.get(), converted);
-    },
+TEST_CASE("arrow-operator") {
+  flyweight::object<std::string> value { "arrow" };
+  CHECK(value->size() == 5);
+}
 
-    task("arrow-operator") = [] {
-      flyweight::object<std::string> value { "arrow" };
-      assert::equal(value->size(), 5);
-    },
+TEST_CASE("operator-equal") {
+  std::string text { "equal" };
+  flyweight::object<std::string> lhs { text };
+  flyweight::object<std::string> rhs { text };
 
-    task("operator-equal") = [] {
-      std::string text { "equal" };
-      flyweight::object<std::string> lhs { text };
-      flyweight::object<std::string> rhs { text };
+  CHECK(lhs == text);
+  CHECK(rhs == text);
+  CHECK(lhs == rhs);
+}
 
-      assert::equal(lhs, text);
-      assert::equal(rhs, text);
-      assert::equal(lhs, rhs);
-    },
+TEST_CASE("operator-not-equal") {
+  std::string text { "not-equal" };
+  flyweight::object<std::string> lhs { "lhs" };
+  flyweight::object<std::string> rhs { "rhs" };
 
-    task("operator-not-equal") = [] {
-      std::string text { "not-equal" };
-      flyweight::object<std::string> lhs { "lhs" };
-      flyweight::object<std::string> rhs { "rhs" };
+  CHECK(lhs != text);
+  CHECK(rhs != text);
+  CHECK(lhs != rhs);
+}
 
-      assert::not_equal(lhs, text);
-      assert::not_equal(rhs, text);
-      assert::not_equal(lhs, rhs);
-    },
+TEST_CASE("operator-greater-equal") {
+  std::string text { "abcde" };
+  flyweight::object<std::string> lhs { "bcdef" };
+  flyweight::object<std::string> rhs { "bcdef" };
 
-    task("operator-greater-equal") = [] {
-      std::string text { "abcde" };
-      flyweight::object<std::string> lhs { "bcdef" };
-      flyweight::object<std::string> rhs { "bcdef" };
+  CHECK(lhs >= text);
+  CHECK(rhs >= text);
+  CHECK(lhs >= rhs);
+}
 
-      assert::greater_equal(lhs, text);
-      assert::greater_equal(rhs, text);
-      assert::greater_equal(lhs, rhs);
-    },
+TEST_CASE("operator-less-equal") {
+  std::string text { "bcdef" };
+  flyweight::object<std::string> lhs { "abcde" };
+  flyweight::object<std::string> rhs { "abcde" };
 
-    task("operator-less-equal") = [] {
-      std::string text { "bcdef" };
-      flyweight::object<std::string> lhs { "abcde" };
-      flyweight::object<std::string> rhs { "abcde" };
+  CHECK(lhs <= text);
+  CHECK(rhs <= text);
+  CHECK(lhs <= rhs);
+}
 
-      assert::less_equal(lhs, text);
-      assert::less_equal(rhs, text);
-      assert::less_equal(lhs, rhs);
-    },
+TEST_CASE("operator-greater") {
+  std::string text { "abcde" };
+  flyweight::object<std::string> lhs { "cdefg" };
+  flyweight::object<std::string> rhs { "bcdef" };
 
-    task("operator-greater") = [] {
-      std::string text { "abcde" };
-      flyweight::object<std::string> lhs { "cdefg" };
-      flyweight::object<std::string> rhs { "bcdef" };
+  CHECK(lhs > text);
+  CHECK(rhs > text);
+  CHECK(lhs > rhs);
+}
 
-      assert::greater(lhs, text);
-      assert::greater(rhs, text);
-      assert::greater(lhs, rhs);
-    },
+TEST_CASE("operator-less") {
+  std::string text { "cdefg" };
+  flyweight::object<std::string> lhs { "abcde" };
+  flyweight::object<std::string> rhs { "bcdef" };
 
-    task("operator-less") = [] {
-      std::string text { "cdefg" };
-      flyweight::object<std::string> lhs { "abcde" };
-      flyweight::object<std::string> rhs { "bcdef" };
-
-      assert::less(lhs, text);
-      assert::less(rhs, text);
-      assert::less(lhs, rhs);
-    }
-  };
-
-  monitor::run();
+  CHECK(lhs < text);
+  CHECK(rhs < text);
+  CHECK(lhs < rhs);
 }
