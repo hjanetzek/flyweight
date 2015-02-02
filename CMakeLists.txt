@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.1.0)
 project(flyweight VERSION 1.0.0.1 LANGUAGES CXX)
 
 #------------------------------------------------------------------------------
@@ -22,8 +22,6 @@ set(DOCS_BINARY_DIR "${PROJECT_BINARY_DIR}/docs")
 
 set(PACK_SOURCE_DIR "${PROJECT_SOURCE_DIR}/package")
 set(PACK_BINARY_DIR "${PROJECT_BINARY_DIR}/package")
-
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/configure")
 
 # Used by cmake-dependent-option
 list(APPEND RPM_DEP "UNIX" "NOT APPLE" "BUILD_PACKAGE")
@@ -75,6 +73,9 @@ if (BUILD_PACKAGE)
   add_subdirectory("${PACK_SOURCE_DIR}" "${PACK_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif ()
 
+#------------------------------------------------------------------------------
+# Install
+#------------------------------------------------------------------------------
 install(FILES
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake

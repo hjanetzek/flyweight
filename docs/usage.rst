@@ -15,13 +15,12 @@ After installing MNMLSTC Flyweight with CMake, it is easy to use cmake's
 
 .. code-block:: cmake
 
-   find_package(flyweight REQUIRED NO_CMAKE_BUILDS_PATH)
+   find_package(flyweight REQUIRED)
+   add_library(my_library ${MY_LIBRARY_SOURCE_FILES})
+   target_include_directories(my_library
+    PUBLIC
+      $<TARGET_PROPERTY:mnmlstc::flyweight,INTERFACE_INCLUDE_DIRECTORIES>)
 
-   # Later on in the file.
-   include_directories(${FLYWEIGHT_INCLUDE_DIR})
-
-It is recommended to avoid having a current build of MNMLSTC Flyweight
-somewhere on your system, as it will take precedence over installed versions.
 Additionally, MNMLSTC Flyweight is not designed to be used from a build
 directory.
 

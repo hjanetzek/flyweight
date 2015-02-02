@@ -31,21 +31,24 @@ function(add_unit_test name file)
     PRIVATE
       $<$<AND:${LIBCXX}>:${USE_STDLIB_LIBCXX}>
       $<$<BOOL:${CAN_USE_STD_CXX11}>:${USE_STD_CXX11}>
-      $<$<BOOL:${CAN_USE_PEDANTIC}>:${USE_PEDANTIC}>
 
       $<$<BOOL:${CAN_WARN_EVERYTHING}>:${WARN_EVERYTHING}>
       $<$<BOOL:${CAN_WARN_NOEXCEPT}>:${WARN_NOEXCEPT}>
+      $<$<BOOL:${CAN_WARN_PEDANTIC}>:${WARN_PEDANTIC}>
       $<$<BOOL:${CAN_WARN_EXTRA}>:${WARN_EXTRA}>
       $<$<BOOL:${CAN_WARN_ALL}>:${WARN_ALL}>
 
       $<$<BOOL:${CAN_WARN_NO_CXX98_COMPAT}>:${WARN_NO_CXX98_COMPAT}>
       $<$<BOOL:${CAN_WARN_NO_EXIT_TIME}>:${WARN_NO_EXIT_TIME}>
-      $<$<BOOL:${CAN_WARN_NO_SHADOW}>:${WARN_NO_SHADOW}>)
+      $<$<BOOL:${CAN_WARN_NO_SHADOW}>:${WARN_NO_SHADOW}>
+      $<$<BOOL:${CAN_WARN_NO_PADDED}>:${WARN_NO_PADDED}>)
   target_include_directories(test-${name}
     SYSTEM
     PRIVATE
       ${CATCH_INCLUDE_DIR}
-      $<TARGET_PROPERTY:mnmlstc::core,INTERFACE_INCLUDE_DIRECTORIES>
+      $<TARGET_PROPERTY:mnmlstc::core,INTERFACE_INCLUDE_DIRECTORIES>)
+  target_include_directories(test-${name}
+    PRIVATE
       $<TARGET_PROPERTY:flyweight,INTERFACE_INCLUDE_DIRECTORIES>)
 endfunction ()
 
@@ -55,10 +58,10 @@ endfunction ()
 set(USE_STDLIB_LIBCXX "-stdlib=libc++")
 set(USE_STD_CXX11 "-std=c++11")
 
-set(USE_PEDANTIC "-pedantic")
 
 set(WARN_EVERYTHING "-Weverything")
 set(WARN_NOEXCEPT "-Wnoexcept")
+set(WARN_PEDANTIC "-Wpedantic")
 set(WARN_ONE_LINE "-WL")
 set(WARN_ERROR "-Werror")
 set(WARN_EXTRA "-Wextra")
@@ -67,6 +70,7 @@ set(WARN_ALL "-Wall")
 set(WARN_NO_CXX98_COMPAT "-Wno-c++98-compat")
 set(WARN_NO_EXIT_TIME "-Wno-exit-time-destructors")
 set(WARN_NO_SHADOW "-Wno-shadow")
+set(WARN_NO_PADDED "-Wno-padded")
 
 if (MSVC)
   set(WARN_EVERYTHING "/Wall") # Yes, I am aware of the irony.
@@ -77,10 +81,9 @@ endif ()
 check_cxx_compiler_flag(${USE_STDLIB_LIBCXX} CAN_USE_STDLIB_LIBCXX)
 check_cxx_compiler_flag(${USE_STD_CXX11} CAN_USE_STD_CXX11)
 
-check_cxx_compiler_flag(${USE_PEDANTIC} CAN_USE_PEDANTIC)
-
 check_cxx_compiler_flag(${WARN_EVERYTHING} CAN_WARN_EVERYTHING)
 check_cxx_compiler_flag(${WARN_NOEXCEPT} CAN_WARN_NOEXCEPT)
+check_cxx_compiler_flag(${WARN_PEDANTIC} CAN_WARN_PEDANTIC)
 check_cxx_compiler_flag(${WARN_ONE_LINE} CAN_WARN_ONE_LINE)
 check_cxx_compiler_flag(${WARN_ERROR} CAN_WARN_ERROR)
 check_cxx_compiler_flag(${WARN_EXTRA} CAN_WARN_EXTRA)
@@ -89,6 +92,7 @@ check_cxx_compiler_flag(${WARN_ALL} CAN_WARN_ALL)
 check_cxx_compiler_flag(${WARN_NO_CXX98_COMPAT} CAN_WARN_NO_CXX98_COMPAT)
 check_cxx_compiler_flag(${WARN_NO_EXIT_TIME} CAN_WARN_NO_EXIT_TIME)
 check_cxx_compiler_flag(${WARN_NO_SHADOW} CAN_WARN_NO_SHADOW)
+check_cxx_compiler_flag(${WARN_NO_PADDED} CAN_WARN_NO_PADDED)
 
 require_cxx_include_file(cstdint HAVE_CSTDINT)
 require_cxx_include_file(cstddef HAVE_CSTDDEF)
