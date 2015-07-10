@@ -87,13 +87,13 @@ template <class U, class E, class A, class T>
 bool operator == (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) noexcept { return std::equal_to<U> { }(lhs, rhs); }
+) noexcept { return &lhs.get() == &rhs.get(); }
 
 template <class U, class E, class A, class T>
 bool operator != (
   object<U, E, A, T> const& lhs,
   object<U, E, A, T> const& rhs
-) noexcept { return std::not_equal_to<U> { }(lhs, rhs); }
+) noexcept { return &lhs.get() != &rhs.get(); }
 
 template <class U, class E, class A, class T>
 bool operator >= (
@@ -125,7 +125,17 @@ bool operator == (object<U, E, A, T> const& lhs, U const& rhs) {
 }
 
 template <class U, class E, class A, class T>
+bool operator == (U const& lhs, object<U, E, A, T> const& rhs) {
+  return std::equal_to<U> { }(lhs, rhs);
+}
+
+template <class U, class E, class A, class T>
 bool operator != (object<U, E, A, T> const& lhs, U const& rhs) {
+  return std::not_equal_to<U> { }(lhs, rhs);
+}
+
+template <class U, class E, class A, class T>
+bool operator != (U const& lhs, object<U, E, A, T> const& rhs) {
   return std::not_equal_to<U> { }(lhs, rhs);
 }
 

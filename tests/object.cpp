@@ -55,6 +55,8 @@ TEST_CASE("operator-equal") {
 
   CHECK(lhs == text);
   CHECK(rhs == text);
+  CHECK(text == lhs);
+  CHECK(text == rhs);
   CHECK(lhs == rhs);
 }
 
@@ -65,6 +67,8 @@ TEST_CASE("operator-not-equal") {
 
   CHECK(lhs != text);
   CHECK(rhs != text);
+  CHECK(text != lhs);
+  CHECK(text != rhs);
   CHECK(lhs != rhs);
 }
 
