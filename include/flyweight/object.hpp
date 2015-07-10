@@ -161,13 +161,14 @@ namespace std {
 template <class U, class E, class A, class T>
 struct hash<flyweight::v1::object<U, E, A, T>> {
   using argument_type = flyweight::v1::object<U, E, A, T>;
-  using result_type = typename hash<
-    typename argument_type::value_type
-  >::result_type;
+  using value_type = typename argument_type::value_type;
+  using hash_type = typename std::remove_const<value_type>::type;
+  using result_type = typename hash<hash_type>::result_type;
 
   result_type operator ()(argument_type const& value) const noexcept {
-    return hash<typename argument_type::value_type> { }(value);
+    return hash<hash_type>{ }(value);
   }
+
 };
 
 } /* namespace std */

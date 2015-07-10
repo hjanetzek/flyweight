@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include <flyweight/object.hpp>
 #include <string>
+#include <unordered_map>
 
 #include <catch.hpp>
 
@@ -105,4 +106,8 @@ TEST_CASE("operator-less") {
   CHECK(lhs < text);
   CHECK(rhs < text);
   CHECK(lhs < rhs);
+}
+
+TEST_CASE("unordered-map-instantiation") {
+  std::unordered_map<flyweight::object<std::string>, int> map;
 }
