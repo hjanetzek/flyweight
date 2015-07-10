@@ -44,6 +44,17 @@ TEST_CASE("cache-size") {
   CHECK(flyweight::cache<std::string>::ref().size() == 2);
 }
 
+TEST_CASE("cache-item-deleter") {
+  CHECK(flyweight::cache<std::string>::ref().size() == 0);
+  {
+    std::string size_1 { "size-1" };
+
+    auto value = flyweight::cache<std::string>::ref().find(size_1);
+    CHECK(flyweight::cache<std::string>::ref().size() == 1);
+  }
+  CHECK(flyweight::cache<std::string>::ref().size() == 0);
+}
+
 /* kv-cache */
 TEST_CASE("kv-cache-is-associative") {
   CHECK(texture_cache::is_associative::value);
